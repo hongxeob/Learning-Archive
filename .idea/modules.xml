@@ -3,6 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Real-World-Software-Development.iml" filepath="$PROJECT_DIR$/Real-World-Software-Development.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Real-World-Software-Development.main.iml" filepath="$PROJECT_DIR$/.idea/modules/Real-World-Software-Development.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Real-World-Software-Development.test.iml" filepath="$PROJECT_DIR$/.idea/modules/Real-World-Software-Development.test.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/archive.iml" filepath="$PROJECT_DIR$/.idea/archive.iml" />
     </modules>
   </component>
