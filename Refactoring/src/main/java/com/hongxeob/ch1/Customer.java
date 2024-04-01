@@ -20,50 +20,62 @@ public class Customer {
 	}
 
 	public String statement() {
-		double totalAmount = 0;
 		int frequentRenterPoints = 0;
 		Enumeration rentals = this.rentals.elements();
 		String result = "Rental Record for " + getName() + "\n";
 
 		while (rentals.hasMoreElements()) {
-			double thisAmount = 0;
 			Rental each = (Rental) rentals.nextElement();
+			frequentRenterPoints = each.getFrequentRenterPoints();
 
-			//각 영화에 대한 요금 결정
-			switch (each.getMovie().getPriceCode()) {
-				case Movie.REGULAR -> {
-					thisAmount += 2;
-					if (each.getDaysRented() > 2) {
-						thisAmount += (each.getDaysRented() - 2) * 1.5;
-					}
-					break;
-				}
-				case Movie.NEW_RELEASE -> {
-					thisAmount += each.getDaysRented() * 3;
-					break;
-				}
-				case Movie.CHILDREN -> {
-					thisAmount += 1.5;
-					if (each.getDaysRented() > 3) {
-						thisAmount += (each.getDaysRented() - 3) * 1.5;
-						break;
-					}
-				}
-			}
-
-			// 포인트(frequent renter points) 추가
-			frequentRenterPoints++;
-			//최신(new release)을 이틀 이상 대여하는 경우 추가 포인트 제공
-			if (each.getMovie().getPriceCode() == Movie.NEW_RELEASE && each.getDaysRented() > 1) {
-				frequentRenterPoints++;
-			}
-
-			result += "\t" + each.getMovie().getTitle() + "\n" + String.valueOf(thisAmount) + "\n";
-			totalAmount += thisAmount;
+			//이 대여에 대한 요금 계산결과 표시
+			result += "\t" + each.getMovie().getTitle() + "\t" + String.valueOf(each.getCharge()) + "\n";
 		}
-		result += "Amount owed is " + String.valueOf(totalAmount) + "\n";
-		result += "You earned " + String.valueOf(frequentRenterPoints) + "frequent renter points";
+
+		result += "Amount owed is " + String.valueOf(getTotalCharge()) + "\n";
+		result += "You earned " + String.valueOf(getTotalFrequentRenterPoints()) + "frequent renter points";
 
 		return result;
 	}
+
+	public String htmlStatement() {
+		Enumeration rentals = this.rentals.elements();
+		String result = "<H1>Rentals for <EM>" + getName() + "</EM><H1><P>\n";
+
+		while (rentals.hasMoreElements()) {
+			Rental each = (Rental) rentals.nextElement();
+			result += each.getMovie().getTitle() + ": " +
+				String.valueOf(each.getCharge()) + "<BR>\n";
+		}
+
+		result += "<P>You Owe <EM>" + String.valueOf(getTotalCharge()) + "</EM><P>\n";
+		result += "On this Rental you earned <EM>" + String.valueOf(getTotalFrequentRenterPoints()) + "</EM> frequent renter point<P>";
+
+		return result;
+	}
+
+	private double getTotalCharge() {
+		double result = 0;
+		Enumeration rentals = this.rentals.elements();
+
+		while (rentals.hasMoreElements()) {
+			Rental each = (Rental) rentals.nextElement();
+			result += each.getCharge();
+		}
+
+		return result;
+	}
+
+	private int getTotalFrequentRenterPoints() {
+		int result = 0;
+		Enumeration rentals = this.rentals.elements();
+
+		while (rentals.hasMoreElements()) {
+			Rental each = (Rental) rentals.nextElement();
+			result += each.getFrequentRenterPoints();
+		}
+
+		return result;
+	}
+
 }
