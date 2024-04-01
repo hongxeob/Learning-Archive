@@ -1,32 +1,29 @@
 package com.hongxeob.ch2;
 
+import static java.util.stream.Collectors.toList;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 
-public class BankStatementCSVParser {
+public class BankStatementCSVParser implements BankStatementParser {
 
-	private static final DateTimeFormatter DATE_PATTERN
-		= DateTimeFormatter.ofPattern("dd-mm-yyyy");
+	private static final DateTimeFormatter DATE_PATTERN = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
-	private BankTransaction parseFromCSV(final String line) {
-		final String[] columns = line.split("");
+	@Override
+	public BankTransaction parseFrom(String line) {
+		final String[] columns = line.split(",");
 
 		final LocalDate date = LocalDate.parse(columns[0], DATE_PATTERN);
 		final double amount = Double.parseDouble(columns[1]);
-		final String description = columns[2];
 
-		return new BankTransaction(date, amount, description);
+		return new BankTransaction(date, amount, columns[2]);
 	}
 
-	public List<BankTransaction> parseLinesFromCSV(final List<String> lines) {
-		ArrayList<BankTransaction> bankTransactions = new ArrayList<>();
-
-		for (String line : lines) {
-			bankTransactions.add(parseFromCSV(line));
-		}
-
-		return bankTransactions;
+	@Override
+	public List<BankTransaction> parseLinesFrom(List<String> lines) {
+		return lines.stream()
+			.map(this::parseFrom)
+			.collect(toList());
 	}
 }
