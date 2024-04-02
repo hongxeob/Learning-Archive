@@ -10,6 +10,8 @@ import springbook.ch1.domain.User;
 public class UserDao {
 
 	private ConnectionMaker connectionMaker;
+	private Connection c;
+	private User user;
 
 	public UserDao(ConnectionMaker connectionMaker) {
 		this.connectionMaker = connectionMaker;
@@ -39,7 +41,7 @@ public class UserDao {
 
 		rs.next();
 
-		User user = new User();
+		this.user = new User();
 
 		user.setId(rs.getString("id"));
 		user.setName(rs.getString("name"));
@@ -49,6 +51,6 @@ public class UserDao {
 		ps.close();
 		c.close();
 
-		return user;
+		return this.user;
 	}
 }
